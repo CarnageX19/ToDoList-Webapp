@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>To Do List</title>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="add-flashcard-con">
+        <div id="email"> <%=email%> </div>
+        <a href="add-task" id="add-flashcard">Add New Task <br></a>
+        <a href="logout" id="logout">Logout </a>
+      </div>
+      <!-- Display Card of Question And Answers Here -->
+      <div id="card-con">
+        <div class="card-list-container"></div>
+
+        <% for(var i=0;i<data.length;i++){ %>
+            <div class="card" id="fl_id <%=data[i].flashcard_id %>" >
+                <p class="question-div"><%= data[i].heading %></p>
+              <p class="answer-div"><%= data[i].description %></p>
+                <div class="buttons-con">
+                  <% if(data[i].done=="Not Yet Done") {%>
+                    <button class="edit" id="fl_id done <%=data[i].flashcard_id %>" name="bt">Mark as Done</button>
+                  <% }%>
+
+                  <% if(data[i].done!="Not Yet Done") {%>
+                    <button class="edit" id="fl_id done <%=data[i].flashcard_id %>" name="bt" disabled="true">Done</button>
+                  <% }%>
+
+                </div>
+            </div>
+		  <% } %>
+      <input type="hidden" id="length" name="<%=data.length %>">
+      </div>
+    </div>
+    <script>
+    $("document").ready(function(event){
+      document.getElementById("add-flashcard").onclick=function(){
+        window.location.replace("/add-task");
+      }
+      $("button").click(function(){
+        var id=this.id;
+        id=id.split(" ")[2];
+        var val={
+            fl_id:id
+          }
+          
+          $.ajax({
+            url:"/todolist",
+            method:"POST",
+            contentType: "application/json",
+            data:JSON.stringify(val),
+            success:function(res){
+              $("#r").html(res);
+            }
+          })
+      })
+
+    })
+    </script>
+  <div id="r"></div>
+  </body>
+</html>

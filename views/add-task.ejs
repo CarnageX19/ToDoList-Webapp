@@ -1,0 +1,60 @@
+
+    <title>Add New Task</title>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+<div class="question-container" id="add-question-card">
+      <h2>Add New Task</h2>
+      <div class="wrapper">
+        <!-- Error message -->
+        <div class="error-con">
+          <span class="hide" id="error">Input fields cannot be empty!</span>
+        </div>
+        <!-- Close Button -->
+        <i class="fa-solid fa-xmark" id="close-btn"></i>
+      </div>
+
+      <label for="question">Task Heading:</label>
+      <textarea class="input" id="question" placeholder="Enter Task heading..." rows="2"></textarea>
+      <label for="answer">Task Description:</label>
+      <textarea class="input" id="answer" rows="4" placeholder="Enter Task Descriptiion..."></textarea>
+      <button id="save-btn">Save</button>
+</div> 
+<div id="r"></div>
+<script>
+document.getElementById("close-btn").onclick=function(){window.location.replace("todolist")};
+document.getElementById("save-btn").onclick=function(){
+  var question=document.getElementById("question").value;
+  var answer=document.getElementById("answer").value;
+  if(question==""){
+    alert("Input fields cannot be empty");
+  }
+  else if(answer=="")
+      alert("Input fields cannot be empty");
+  else{
+    var val={
+    heading:question,
+    desc:answer,
+      }
+      $.ajax({
+        url:"/add-task",
+            method:"POST",
+            contentType: "application/json",
+            data:JSON.stringify(val),
+            success:function(res){
+              $("#r").html(res);
+            }
+      })
+  }
+}
+</script>
